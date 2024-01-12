@@ -10,7 +10,19 @@ Easily deploy an MLflow tracking server with 1 command.
 
 2. `cd` into the `mlflow-docker-compose` directory
 
-3. Build and run the containers with `docker-compose`
+3. `Optional`: you can change credentials for services in `.env` file. For this:
+    ```bash
+    nano .env
+    ```
+    In this file, the following variables are available for you to modify:
+    * AWS_ACCESS_KEY_ID
+    * AWS_SECRET_ACCESS_KEY
+    * MYSQL_DATABASE
+    * MYSQL_USER
+    * MYSQL_PASSWORD
+    * MYSQL_ROOT_PASSWORD
+
+4. Build and run the containers with `docker-compose`
 
     ```bash
     docker-compose up -d --build
