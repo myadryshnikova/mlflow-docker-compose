@@ -1,5 +1,13 @@
 # MLflow On-Premise Deployment using Docker Compose
-Easily deploy an MLflow tracking server with 1 command.
+Easily deploy an MLflow tracking server.
+
+## Table of contents
+- [MLflow On-Premise Deployment using Docker Compose](#mlflow-on-premise-deployment-using-docker-compose)
+  - [How to run](#how-to-run)
+  - [Containerization](#containerization)
+  - [Port Map](#port-map)
+  - [Mlflow authentication](#mlflow-authentication)
+    - [Quick start on important endpoints in service deployment](#quick-start-on-important-endpoints-in-service-deployment)
 
 ## How to run
 1. Clone this repository
