@@ -32,19 +32,19 @@ Easily deploy an MLflow tracking server with 1 command.
 The MLflow tracking server is composed of 4 docker containers:
 
 * MLflow server
-* MinIO object storage server
+* MinIO object storage server (2 containers)
 * MySQL database server
 
 ## Port Map
 | Service                      | Port | 
 |------------------------------|------|                  
-| db                           | 3306 |              
+| mlflow-db                    | 3306 |              
 | mlflow-server                | 5000 |
-| minio REST                   | 9000 |                  
-| minio UI                     | 9001 |
+| mlflow-s3 REST               | 9000 |                  
+| mlflow-s3 UI                 | 9001 |
 
-Locally, services will be accessed at http://localhost:<port>. 
-If deployed on a server and must be accessed externally, services will be accessed at http://<server ip-address>:<port>. 
+Locally, services will be accessed at `http://localhost:<port>`. 
+If deployed on a server and must be accessed externally, services will be accessed at `http://<server ip-address>:<port>`. 
 
 To change the ports for services, you need to change them in the `docker-compose.yml` file.
 

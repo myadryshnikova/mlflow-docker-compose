@@ -4,7 +4,7 @@ services:
     minio:
         restart: always
         image: minio/minio@sha256:2a42aa904e37061dcd09061008cbba5207e43d448418a4425da61c1d9b9cac4f
-        container_name: mlflow_s3
+        container_name: mlflow-s3
         ports:
             - "9000:9000"
             - "9001:9001"
@@ -35,7 +35,7 @@ services:
     db:
         restart: always
         image: mysql/mysql-server@sha256:5b40d96b11333570143d98d3a74100fefadb9abb17b27a95dbc9ad33544ec142
-        container_name: mlflow_db
+        container_name: mlflow-db
         ports:
             - "3306:3306"
         environment:
@@ -50,7 +50,7 @@ services:
         restart: always
         build: ./mlflow
         image: mlflow_server
-        container_name: mlflow_server
+        container_name: mlflow-server
         depends_on:
             - mc
             - db
