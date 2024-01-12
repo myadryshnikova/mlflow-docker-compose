@@ -57,7 +57,6 @@ Endpoints are available at the address of the deployed mlflow-server:
 
 | API                          | Endpoint                                  | Method| Request scheme | 
 |------------------------------|-------------------------------------------|-------| ---------------|                
-| Update User Password         | 2.0/mlflow/users/update-password          | PATCH | <pre>{<br>  "username": str,<br>  "password": str<br>}</pre>               |
-| Create User                  | 2.0/mlflow/users/create                   | POST  |                |  
-| Update User Admin            | 2.0/mlflow/users/update-admin             | PATCH |                |             
-| Create Experiment Permission | 2.0/mlflow/experiments/permissions/create | GET   |      | 
+| Update User Password         | 2.0/mlflow/users/update-password          | PATCH |json<br><pre>{<br>  "username": str,<br>  "password": str<br>}</pre>|
+| Create User                  | 2.0/mlflow/users/create                   | POST  |json<br><pre>{<br>  "username": str,<br>  "password": str<br>}</pre>|  
+| Update User Admin            | 2.0/mlflow/users/update-admin             | PATCH |json<br><pre>{<br>  "username": str,<br>  "is_admin": bool<br>}</pre>|              
