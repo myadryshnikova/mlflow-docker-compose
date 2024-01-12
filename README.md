@@ -1,14 +1,11 @@
 # MLflow On-Premise Deployment using Docker Compose
 Easily deploy an MLflow tracking server with 1 command.
 
-MinIO S3 is used as the artifact store and MySQL server is used as the backend store.
-
 ## How to run
-
-1. Clone (download) this repository
+1. Clone this repository
 
     ```bash
-    git clone https://github.com/sachua/mlflow-docker-compose.git
+    git clone https://github.com/myadryshnikova/mlflow-docker-compose.git
     ```
 
 2. `cd` into the `mlflow-docker-compose` directory
@@ -19,65 +16,48 @@ MinIO S3 is used as the artifact store and MySQL server is used as the backend s
     docker-compose up -d --build
     ```
 
-4. Access MLflow UI with http://localhost:5000
-
-5. Access MinIO UI with http://localhost:9000
-
 ## Containerization
-
 The MLflow tracking server is composed of 4 docker containers:
 
 * MLflow server
 * MinIO object storage server
 * MySQL database server
 
-## Example
+## Port Map
+| Service                      | Port | 
+|------------------------------|------|                  
+| db                           | 3306 |              
+| mlflow-server                | 5000 |
+| minio REST                   | 9000 |                  
+| minio UI                     | 9001 |
 
-1. Install [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html)
+Locally, services will be accessed at http://localhost:<port>. 
+If deployed on a server and must be accessed externally, services will be accessed at http://<server ip-address>:<port>. 
 
-2. Install MLflow with extra dependencies, including scikit-learn
+To change the ports for services, you need to change them in the `docker-compose.yml` file.
 
-    ```bash
-    pip install mlflow[extras]
-    ```
+## Mlflow authentication
+Basic authentication to mlflow-server is enabled by default in this project.
 
-3. Set environmental variables
+Default credentials of the service admin:
+* User: `admin`
+* Password: `password`
 
-    ```bash
-    export MLFLOW_TRACKING_URI=http://localhost:5000
-    export MLFLOW_S3_ENDPOINT_URL=http://localhost:9000
-    ```
-4. Set MinIO credentials
 
-    ```bash
-    cat <<EOF > ~/.aws/credentials
-    [default]
-    aws_access_key_id=minio
-    aws_secret_access_key=minio123
-    EOF
-    ```
+After starting the service, you should immediately change the password for the administrator. This can be done using the REST request described in the next section.
 
-5. Train a sample MLflow model
+Further explanations will be linked to the Mlflow documentation. You can see more details of the endpoints at the link: 
+https://www.mlflow.org/docs/latest/auth/index.html#authenticating-to-mlflow
 
-    ```bash
-    mlflow run https://github.com/mlflow/mlflow-example.git -P alpha=0.42
-    ```
+### Quick start on important endpoints in service deployment
+This section describes the endpoints needed to get started with user management and experimentation. More in-depth information can be found in the MLflow documentation.
 
-    * Note: To fix ModuleNotFoundError: No module named 'boto3'
+Endpoints are available at the address of the deployed mlflow-server: 
+`http://<server ip-address>:5000/api/`. HTTP authentication by **admin** credentials is required for all endpoints.
 
-        ```bash
-        #Switch to the conda env
-        conda env list
-        conda activate mlflow-3eee9bd7a0713cf80a17bc0a4d659bc9c549efac #replace with your own generated mlflow-environment
-        pip install boto3
-        ```
-
- 6. Serve the model (replace with your model's actual path)
-    ```bash
-    mlflow models serve -m S3://mlflow/0/98bdf6ec158145908af39f86156c347f/artifacts/model -p 1234
-    ```
-
- 7. You can check the input with this command
-    ```bash
-    curl -X POST -H "Content-Type:application/json; format=pandas-split" --data '{"columns":["alcohol", "chlorides", "citric acid", "density", "fixed acidity", "free sulfur dioxide", "pH", "residual sugar", "sulphates", "total sulfur dioxide", "volatile acidity"],"data":[[12.8, 0.029, 0.48, 0.98, 6.2, 29, 3.33, 1.2, 0.39, 75, 0.66]]}' http://127.0.0.1:1234/invocations
-    ```
+| API                          | Endpoint                                  | Method| Request scheme | 
+|------------------------------|-------------------------------------------|-------| ---------------|                
+| Update User Password         | 2.0/mlflow/users/update-password          | PATCH | <pre>{<br>  "username": str,<br>  "password": str<br>}</pre>               |
+| Create User                  | 2.0/mlflow/users/create                   | POST  |                |  
+| Update User Admin            | 2.0/mlflow/users/update-admin             | PATCH |                |             
+| Create Experiment Permission | 2.0/mlflow/experiments/permissions/create | GET   |      | 
